@@ -1,0 +1,67 @@
+Generate the next permutation (dictionary order) of the current permutation under the time complexity of O (n).
+1. Find the first positive sequence pair from right to left (array [i] < array [i + 1], because there is no equal sign, the repeated permutations can be eliminated perfectly)
+2. Search from the rightmost to the left until I, find the smallest character larger than array [i] and record it as array [J]
+3. Exchange array [i] and array [J]
+4. Reverse the character after I
+This leads to the next arrangement of the dictionary order.
+If this method is used continuously, all permutations can be deduced from the arrangement with the smallest dictionary order.
+Time complexity O (n * n!)。
+code's as follows:
+import java.util.ArrayList;
+import java.util.*;
+public class Solution {
+    public ArrayList<String> Permutation(String str) {
+        ArrayList<String> res = new ArrayList<String>();
+       if(str.length()==0){
+           return res;
+       }
+        if(str.length()==1){
+            res.add(str);
+            return res;
+        }
+        char [] c= str.toCharArray();
+        Arrays.sort(c);
+        String newarr = new String(c);
+        res.add(newarr);
+        while(true){
+            newarr=order(newarr);
+            if(newarr.equals("false")){
+                break;
+            }
+            else
+                res.add(newarr);
+        }
+        return res;
+    }
+    public String order(String s){
+        char [] c= s.toCharArray();
+        int cou=-1;
+        for(int i=s.length()-2;i>=0;i--){
+            if(c[i]<c[i+1]){
+                cou=i;
+                break;
+            }
+        }
+        if(cou==-1){
+                return "false";
+            }
+        for(int j=s.length()-1;j>cou;j--){
+            if(c[j]>c[cou]){
+                char temp=c[j];
+            c[j]=c[cou];
+            c[cou]=temp;
+                break;
+            }  
+        }
+        int i=s.length()-1,j=cou+1;
+        while(j<i){
+            char temp=c[i];
+            c[i]=c[j];
+            c[j]=temp;
+            i--;
+            j++;
+        }
+        String str= new String(c);
+        return str;
+    }
+}
